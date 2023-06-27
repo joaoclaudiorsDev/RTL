@@ -17,13 +17,13 @@ describe('Teste o componente FavoritePokemon', () => {
     const favoritePokemonCard = screen.getByText(/pikachu/i);
     expect(favoritePokemonCard).toBeInTheDocument();
 
-    const selectedPokemon = screen.getByLabelText('Pokémon favoritado?');
+    const detailsPokemonPage = screen.getByRole('link', { name: /more details/i });
+    await user.click(detailsPokemonPage);
+
+    const selectedPokemon = screen.getByText(/pokémon favoritado\?/i);
     await user.click(selectedPokemon);
 
     const checkFavorite = screen.getByRole('link', { name: /favorite pokémon/i });
     await user.click(checkFavorite);
-
-    const detailsPokemonPage = screen.getByRole('link', { name: /more details/i });
-    await user.click(detailsPokemonPage);
   });
 });
