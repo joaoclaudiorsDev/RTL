@@ -7,7 +7,7 @@ describe('Teste o componente FavoritePokemon', () => {
   test('É exibida na tela a mensagem No favorite pokemon found caso a pessoa não tenha Pokémon favorito', () => {
     renderWithRouter(<FavoritePokemon />);
 
-    const notFound = screen.getByText(/no favorite pokémon found/i, { selector: 'p' });
+    const notFound = screen.getByText('No favorite Pokémon found', { selector: 'p' });
     expect(notFound).toBeInTheDocument();
   });
 
@@ -25,5 +25,8 @@ describe('Teste o componente FavoritePokemon', () => {
 
     const checkFavorite = screen.getByRole('link', { name: /favorite pokémon/i });
     await user.click(checkFavorite);
+
+    const pokemonComponents = screen.getAllByTestId('pokemon-name');
+    expect(pokemonComponents.length).toBeGreaterThan(0);
   });
 });
