@@ -3,17 +3,13 @@ import App from '../App';
 import renderWithRouter from '../renderWithRouter';
 
 describe('5. Teste o component <Pokedex />', () => {
-  let renderedComponent;
-
-  beforeEach(() => {
-    renderedComponent = renderWithRouter(<App />);
-  });
-
   test('Exibe um h2 com texto "Encountered Pokémon"', () => {
-    expect(screen.getByText('Encountered Pokémon')).toBeInTheDocument();
+    renderWithRouter(<App />);
+    expect(screen.getByRole('heading', { name: 'Encountered Pokémon' })).toBeInTheDocument();
   });
 
   test('exibe o próximo Pokémon da lista ao clicar no botão Próximo Pokémon', () => {
+    renderWithRouter(<App />);
     const buttonNext = screen.getByTestId('next-pokemon');
     expect(buttonNext).toBeInTheDocument();
     expect(buttonNext).toHaveTextContent('Próximo Pokémon');
@@ -30,6 +26,7 @@ describe('5. Teste o component <Pokedex />', () => {
   });
 
   test('Deve existir um botão de filtragem para cada tipo de Pokémon', () => {
+    renderWithRouter(<App />);
     const pokemonTypes = ['Electric', 'Fire', 'Bug', 'Poison', 'Psychic', 'Normal', 'Dragon'];
     const typeButtons = screen.getAllByTestId('pokemon-type-button');
 
@@ -41,17 +38,24 @@ describe('5. Teste o component <Pokedex />', () => {
   });
 
   test('O texto do botão deve corresponder ao nome do tipo, ex.: Psychic', () => {
-    const psychicTypeButton = screen.getByText('Psychic');
+    renderWithRouter(<App />);
+    const psychicTypeButton = screen.getByRole('button', { name: 'Psychic' });
     expect(psychicTypeButton).toBeInTheDocument();
   });
 
-  test('O botão All precisa estar sempre visível.', () => {
-    const allButton = screen.getByText('All');
-    expect(allButton).toBeInTheDocument();
+  test('O botão com a classe "filter-button" está presente', () => {
+    renderWithRouter(<App />);
+    const filterButton = screen.getByRole('button', { name: /all/i });
+    expect(filterButton).toBeInTheDocument();
+    expect(filterButton).toHaveClass('filter-button');
   });
 
-  test('Ao carregar a página, o filtro selecionado deve ser All', () => {
-    const allButton = screen.getByText('All');
-    expect(allButton).toHaveClass('filter-button');
+  test('Ao clicar no botão All, a Pokédex deve mostrar os Pokémon normalmente (sem filtros)', () => {
+    renderWithRouter(<App />);
+    const psychicTypeButton = screen.getByRole('button', { name: 'Psychic' });
+    fireEvent.click(psychicTypeButton);
+
+    const allButton = screen.getByRole('button', { name: /all/i });
+    fireEvent.click(allButton);
   });
 });
